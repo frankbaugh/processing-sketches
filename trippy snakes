@@ -1,0 +1,59 @@
+snake[][] james;
+float xincrement = 25;
+int nsnakes = 150;
+int nbigsnakes = 30;
+float xpos = 50;
+void setup() {
+ size(800, 800);   
+ james = new snake[nbigsnakes][nsnakes];
+ for (int i = 0; i <nbigsnakes; i ++) {
+   for (int n= 0; n <nsnakes; n ++) {
+   james[i][n] = new snake(xpos, map(n, 0, nsnakes, 5, height));
+   }
+   xpos += xincrement;
+ }
+}
+
+void draw() {
+  background(255);
+  for (int n = 0; n <nbigsnakes; n ++) {
+    for (int i = 0; i <nsnakes; i ++) {
+      james[n][i].move();
+      james[n][i].show();
+      james[n][i].edge();
+  }
+  }
+}
+class snake {
+  float strokewidth, dy,strokelength, snakeredness;
+  PVector location, velocity, acceleration;
+  
+  snake(float xpos, float ypos) {
+    location = new PVector(xpos, ypos);
+    velocity = new PVector(2,2);
+    dy = 1;
+    strokewidth = 0.03;
+    strokelength =20;
+    snakeredness = random(20, 140);
+  }
+  
+  void move() {
+    location.y += dy;
+    location.x += map(strokewidth * sin(location.y/strokelength), -1, 1, -20, 20);
+    
+    
+    
+  }
+  void edge() {
+    if (location.y >= 800) {
+      location.y = 0;
+    }
+    
+  }
+  void show() {
+    fill(snakeredness, 120, 120);
+    ellipse(location.x, location.y, 20, 20);
+    
+  }
+  
+}
