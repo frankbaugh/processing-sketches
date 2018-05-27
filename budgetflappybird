@@ -1,0 +1,112 @@
+bird james;
+obstacle[] benis;
+float beniscount = -1;
+void setup() {
+  
+  size(800,800);
+ 
+  james = new bird();
+  benis = new obstacle[100];
+  for (int i = 0; i < 100; i ++) {
+    benis[i] = new obstacle();
+  }
+}
+
+void draw() {
+  background(0);
+  james.move();
+  if (keyPressed && frameCount % 5 == 0) {
+    float bmax = james.location.y - 100;
+    james.bounce(bmax);
+  }
+  james.edges();
+  james.show();
+  if (frameCount % 40 == 0 && beniscount < 100) {
+    beniscount ++;
+  }
+    for (int i = 0; i < beniscount; i++) {
+      benis[i].move();
+      benis[i].show();
+      benis[i].collide(james.location.y + 20, james.location.y - 20);
+    }
+    
+    
+}
+
+class obstacle {
+  PVector location, velocity, dimension;
+  boolean collided;
+ 
+  obstacle() {
+    velocity = new PVector(random(5), random(500)/height);
+    location = new PVector(800, ((randomGaussian()*300) + 400));
+    dimension = new PVector(random(200), random(200));
+  }
+  void move() {
+    location.x -= velocity.x;
+    location.y += velocity.y;
+    
+  }
+   
+   void collide(float high, float low) {
+   if (location.x < 140) {
+     if ((high >= location.y && high <= location.y + dimension.y) || (low >= location.y && low <= location.y + dimension.y)) {
+       collided = true;
+     }
+     
+   }
+}
+
+  void show() {
+    stroke(255);
+    fill(255,20);
+    if (collided) {
+      fill(255, 0, 0, 80);
+      collided = false;
+    }
+    rect(location.x, location.y, dimension.x, dimension.y);
+    
+  }
+  
+}
+
+class bird {
+  float mass = 4;
+  float scale = 10;
+  float bscale = 0.000000001;
+  PVector location, velocity, acceleration, movement;
+  
+  bird() {
+    location = new PVector(100, 400);
+    velocity = new PVector(2,2);
+    acceleration = new PVector(0,0);
+    
+    
+  }
+  void move() {
+    
+    acceleration.y = mass/(pow(location.y, 3));
+    velocity.y += acceleration.y;
+    location.y += velocity.y;
+  }
+  void bounce(float bmax) {
+    while (!(location.y <= bmax)) {
+    acceleration.y = pow(bmax - location.y, 2) * bscale;
+    velocity.y += acceleration.y;
+    location.y -= velocity.y;
+    }
+  }
+  
+  void edges() {
+    if (location.y <= 0 || location.y >= 800) {
+      location.y = 400;
+    }
+  }
+  
+  void show() {
+    stroke(255);
+    fill(255, 20);
+    ellipse(location.x, location.y, 40, 40);
+    
+  }
+}
