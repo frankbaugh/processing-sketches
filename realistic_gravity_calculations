@@ -1,0 +1,106 @@
+mover[] james;
+attractor ben;
+int njames = 5;
+float fconstant = 0.005;
+void setup() {
+  size(800, 800);
+
+james = new mover[njames];
+ben = new attractor();
+for (int i = 0; i < njames; i ++) {
+  
+  james[i] = new mover();
+}
+}
+
+void draw() {
+  
+  background(0);
+
+  beginShape();
+  noFill();
+  stroke(255);
+  for (int i = 0; i < njames; i ++) {
+    if (mousePressed) {
+    PVector wind = new PVector(0.1, -0.1);
+    james[i].applyforce(wind);
+    
+  }
+  PVector vclone = james[i].velocity.get();
+  PVector friction = (vclone.normalize().mult(-1 * fconstant));
+  james[i].applyforce(friction);
+  PVector force = ben.attract(james[i]);
+  james[i].applyforce(force);
+  vertex(james[i].location.x, james[i].location.y);
+  james[i].move();
+
+  james[i].show();
+  }
+  endShape(CLOSE);
+  ben.show();
+  
+}
+class attractor {
+  float mass, g;
+  PVector location, force;
+  attractor() {
+    location = new PVector(width/2, height/2);
+    mass = 20;
+    g = 0.08;
+  }
+  
+  PVector attract(mover tjames) {
+    PVector dir = PVector.sub(location, tjames.location);
+    float distance = dir.mag();
+    distance = constrain(distance, 3, 10);
+
+    return (dir.normalize().mult(g*mass*tjames.mass/pow(distance, 2)));
+  }
+   void show() {
+     noFill();
+     stroke(255);
+     ellipse(location.x, location.y, mass * 2, mass * 2);
+     
+   }
+  
+}
+class mover {
+  PVector location, velocity, acceleration;
+  float mass, colour;
+  mover() {
+    velocity = new PVector(0,0);
+    acceleration = new PVector(0,0);
+    location = new PVector(random(100, 700), random(100, 700));
+    mass = 10;
+    colour = random(10, 255);
+  }
+  
+  void applyforce(PVector tforce) {
+    PVector f = tforce.get();
+    acceleration.add(f.div(mass));
+    
+ 
+    
+    
+  }
+  
+  
+  void move() {
+    velocity.add(acceleration);
+    location.add(velocity);
+    acceleration.mult(0);
+    
+    
+  }
+  void show() {
+    colorMode(HSB);
+    noFill();
+    stroke(colour, 200, 200);
+    ellipse(location.x, location.y, 20, 20);
+    
+    
+    
+  }
+  
+  
+}
