@@ -1,6 +1,6 @@
 //adjust "g" in attractor to increase generation speed, though the frameCount % mod X will need to be lowered for smooth orbit lines
 //adjust njames for number of different orbits (colours)
-//this is based on my gravity simulations earlier, but made pretty and with a few variable additions and changes
+//this is based on my gravity simulations earlier, but made pretty and with a few variable additions and changes, notably the 3d array orbits
 //this is actually a somewhat useful processing sketch!?
 mover[] james;
 attractor ben;
