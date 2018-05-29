@@ -5,8 +5,8 @@
 mover[] james;
 attractor ben;
 boolean start = false;
-float[][][] orbits = new float[5][20000][2];
 int njames = 5;
+float[][][] orbits = new float[njames][20000][2];
 int orbitcount = 0;
 float fconstant = 0.00005;
 void setup() {
